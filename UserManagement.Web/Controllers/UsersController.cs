@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 
@@ -28,5 +29,25 @@ public class UsersController : Controller
         };
 
         return View(model);
+    }
+
+    [HttpPost]
+    public ActionResult FilterByActive(bool isActive)
+    {
+        var items = _userService.FilterByActive(isActive).Select(p => new UserListItemViewModel
+        {
+            Id = p.Id,
+            Forename = p.Forename,
+            Surname = p.Surname,
+            Email = p.Email,
+            IsActive = p.IsActive
+        });
+
+        var model = new UserListViewModel
+        {
+            Items = items.ToList()
+        };
+
+        return PartialView("_UserTablePartial", model);
     }
 }
