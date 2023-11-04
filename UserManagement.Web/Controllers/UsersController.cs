@@ -7,6 +7,7 @@ using UserManagement.Web.Models.Users;
 
 namespace UserManagement.WebMS.Controllers;
 
+// Uncomment whe solution is found, since this is stopping asp-action from working in the view. 
 //[Route("users")]
 public class UsersController : Controller
 {
@@ -70,6 +71,24 @@ public class UsersController : Controller
             _userService.CreateUser(user);
             return RedirectToAction(nameof(List));
         }
+        return View(user);
+    }
+
+    // GET: Users/View/1
+    public IActionResult View(long? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var user = _userService.FindUser((long)id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
         return View(user);
     }
 }

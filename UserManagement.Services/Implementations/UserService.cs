@@ -28,4 +28,9 @@ public class UserService : IUserService
         _dataAccess.Create(user);
         return GetAll();
     }
+
+    public User FindUser(long id)
+    {
+        return GetAll().Where(_x => _x.Id == id).First();
+    }
 }
