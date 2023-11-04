@@ -26,7 +26,7 @@ public class UserServiceTests
     {
         // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
         var service = CreateService();
-        SetupUsers();
+        AddUsers();
 
         // Act: Filter active users
         var result = service.FilterByActive(true);
@@ -44,7 +44,7 @@ public class UserServiceTests
     {
         // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
         var service = CreateService();
-        SetupUsers();
+        AddUsers();
 
         // Act: Filter non-active users
         var result = service.FilterByActive(false);
@@ -79,7 +79,7 @@ public class UserServiceTests
     }
 
 
-    private IQueryable<User> SetupUsers()
+    private IQueryable<User> AddUsers()
     {
         var users = new[]
         {

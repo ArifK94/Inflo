@@ -23,4 +23,9 @@ public class UserService : IUserService
     }
 
     public IEnumerable<User> GetAll() => _dataAccess.GetAll<User>();
+    public IEnumerable<User> CreateUser(User user)
+    {
+        _dataAccess.Create(user);
+        return GetAll();
+    }
 }

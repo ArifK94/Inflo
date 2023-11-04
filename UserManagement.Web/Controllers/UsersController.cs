@@ -1,11 +1,13 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 
 namespace UserManagement.WebMS.Controllers;
 
-[Route("users")]
+//[Route("users")]
 public class UsersController : Controller
 {
     private readonly IUserService _userService;
@@ -53,4 +55,21 @@ public class UsersController : Controller
         return PartialView("_UserTablePartial", model);
     }
 
+    // GET: Users/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(User user)
+    {
+        if (ModelState.IsValid)
+        {
+            _userService.CreateUser(user);
+            return RedirectToAction(nameof(List));
+        }
+        return View(user);
+    }
 }
