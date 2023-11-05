@@ -54,7 +54,7 @@ public class UsersController : Controller
             Items = items.ToList()
         };
 
-        return PartialView("_UserTablePartial", model);
+        return PartialView("_UsersListPartial", model);
     }
 
     // GET: Users/Create
