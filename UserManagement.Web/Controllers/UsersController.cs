@@ -135,4 +135,19 @@ public class UsersController : Controller
         }
         return View(user);
     }
+
+    // GET: Users/Delete/1
+    public IActionResult Delete(long id)
+    {
+        var user = _userService.FindUser(id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        _userService.DeleteUser(user);
+
+        return RedirectToAction(nameof(List));
+    }
 }

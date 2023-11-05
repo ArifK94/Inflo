@@ -39,4 +39,10 @@ public class UserService : IUserService
         _dataAccess.Update(user);
         return user;
     }
+
+    public User DeleteUser(User user)
+    {
+        _dataAccess.Delete(user);
+        return user;
+    }
 }
