@@ -20,7 +20,7 @@ public class User
     public string Email { get; set; } = default!;
 
     [DisplayName("Date of Birth")]
-    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+    [DataType(DataType.Date)]
     public DateTime? DateOfBirth { get; set; }
     public bool IsActive { get; set; }
 }

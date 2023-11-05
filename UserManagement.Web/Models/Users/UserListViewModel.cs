@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace UserManagement.Web.Models.Users;
@@ -15,8 +16,8 @@ public class UserListItemViewModel
     public string? Surname { get; set; }
     public string? Email { get; set; }
 
+    [DisplayName("Date of Birth")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? DateOfBirth { get; set; }
     public bool IsActive { get; set; }
 }
