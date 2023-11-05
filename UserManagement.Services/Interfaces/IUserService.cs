@@ -14,5 +14,6 @@ public interface IUserService
     IEnumerable<User> GetAll();
     IEnumerable<User> CreateUser(User user);
     User FindUser(long id);
+    User EditUser(User user);
 
 }

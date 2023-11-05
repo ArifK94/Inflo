@@ -33,4 +33,10 @@ public class UserService : IUserService
     {
         return GetAll().Where(_x => _x.Id == id).First();
     }
+
+    User IUserService.EditUser(User user)
+    {
+        _dataAccess.Update(user);
+        return user;
+    }
 }

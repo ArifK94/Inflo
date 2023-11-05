@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
+using System.Reflection;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -89,6 +90,49 @@ public class UsersController : Controller
             return NotFound();
         }
 
+        return View(user);
+    }
+
+    // GET: Users/Edit/1
+    public IActionResult Edit(long? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var user = _userService.FindUser((long)id);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return View(user);
+    }
+
+    // POST: Users/Edit/1
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(long id, User user)
+    {
+        if (id != user.Id)
+        {
+            return NotFound();
+        }
+        User existingUser = _userService.FindUser(id);
+
+        // TODO: Place this in a separate method in a shared class. 
+        // Copy properties between both user instances.
+        foreach (PropertyInfo property in typeof(User).GetProperties().Where(p => p.CanWrite))
+        {
+            property.SetValue(existingUser, property.GetValue(user, null), null);
+        }
+
+        if (ModelState.IsValid)
+        {
+            _userService.EditUser(existingUser);
+            return RedirectToAction(nameof(List));
+        }
         return View(user);
     }
 }
