@@ -1,3 +1,13 @@
+# Packages Installed
+
+* **Newtonsoft.Json - Used to serialize toast TempData objects.
+
+* **Toastr(Css & JS) - Used for displaying the toast messages.
+
+
+
+
+
 # User Management Technical Exercise
 
 The exercise is an ASP.NET Core web application backed by Entity Framework Core, which faciliates management of some fictional users.
