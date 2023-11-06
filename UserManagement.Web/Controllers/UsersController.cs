@@ -5,6 +5,7 @@ using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -32,6 +33,8 @@ public class UsersController : Controller
         {
             Items = items.ToList()
         };
+
+
 
         return View(model);
     }
@@ -70,8 +73,12 @@ public class UsersController : Controller
         if (ModelState.IsValid)
         {
             _userService.CreateUser(user);
+
+            SetToastNotification(this, "New User created.", true);
             return RedirectToAction(nameof(List));
         }
+
+        SetToastNotification(this, "New User was not created.", false);
         return View(user);
     }
 
@@ -131,8 +138,11 @@ public class UsersController : Controller
         if (ModelState.IsValid)
         {
             _userService.EditUser(existingUser);
+            SetToastNotification(this, "User updated.", true);
             return RedirectToAction(nameof(List));
         }
+
+        SetToastNotification(this, "User was not updated.", false);
         return View(user);
     }
 
@@ -143,11 +153,20 @@ public class UsersController : Controller
 
         if (user == null)
         {
+            SetToastNotification(this, "User was not found.", false);
             return NotFound();
         }
 
         _userService.DeleteUser(user);
 
+        SetToastNotification(this, "User was deleted.", true);
         return RedirectToAction(nameof(List));
+    }
+
+    public void SetToastNotification(Controller controller, string message, bool isSuccess)
+    {
+        string type = isSuccess ? "success" : "error";
+        string title = isSuccess ? "Success" : "Error";
+        controller.TempData["toastrMessage"] = JsonConvert.SerializeObject(new { type = type, message = message, title = title });
     }
 }
