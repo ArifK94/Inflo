@@ -4,6 +4,7 @@ using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 using System.Reflection;
 using UserManagement.Services.Interfaces;
+using System;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -74,51 +75,80 @@ public class UsersController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(User user)
     {
-        if (ModelState.IsValid)
+        try
         {
             _userService.CreateUser(user);
 
             _sharedService.SetToastNotification(this, "New User created.", true);
             return RedirectToAction(nameof(List));
         }
+        catch(Exception)
+        {
+            _sharedService.SetToastNotification(this, "New User was not created.", false);
+            return View(user);
+        }
 
-        _sharedService.SetToastNotification(this, "New User was not created.", false);
-        return View(user);
     }
 
     // GET: Users/View/1
     public IActionResult View(long? id)
     {
-        if (id == null)
+        string errorMessage = "User was not found.";
+        try
         {
-            return NotFound();
+            if (id == null)
+            {
+                _sharedService.SetToastNotification(this, errorMessage, false);
+                return RedirectToAction(nameof(List));
+            }
+
+            var user = _userService.FindUser((long)id);
+
+            if (user == null)
+            {
+                _sharedService.SetToastNotification(this, errorMessage, false);
+                return RedirectToAction(nameof(List));
+            }
+
+            return View(user);
+        }
+        catch(Exception)
+        {
+            _sharedService.SetToastNotification(this, errorMessage, false);
+            return RedirectToAction(nameof(List));
         }
 
-        var user = _userService.FindUser((long)id);
-
-        if (user == null)
-        {
-            return NotFound();
-        }
-
-        return View(user);
     }
 
     // GET: Users/Edit/1
     public IActionResult Edit(long? id)
     {
-        if (id == null)
+        string errorMessage = "User was not found.";
+        try
         {
-            return NotFound();
+            if (id == null)
+            {
+                _sharedService.SetToastNotification(this, errorMessage, false);
+                return RedirectToAction(nameof(List));
+            }
+
+            var user = _userService.FindUser((long)id);
+
+            if (user == null)
+            {
+                _sharedService.SetToastNotification(this, errorMessage, false);
+                return RedirectToAction(nameof(List));
+            }
+            return View(user);
+
+        }
+        catch (Exception)
+        {
+            _sharedService.SetToastNotification(this, errorMessage, false);
+            return RedirectToAction(nameof(List));
         }
 
-        var user = _userService.FindUser((long)id);
 
-        if (user == null)
-        {
-            return NotFound();
-        }
-        return View(user);
     }
 
     // POST: Users/Edit/1
@@ -130,36 +160,48 @@ public class UsersController : Controller
         {
             return NotFound();
         }
-        User existingUser = _userService.FindUser(id);
 
-        // Copy properties between both user instances.
-        _sharedService.CopyObjectProperties(user, existingUser);
-
-        if (ModelState.IsValid)
+        try
         {
+            User existingUser = _userService.FindUser(id);
+
+            // Copy properties between both user instances.
+            _sharedService.CopyObjectProperties(user, existingUser);
+
             _userService.EditUser(existingUser);
             _sharedService.SetToastNotification(this, "User updated.", true);
             return RedirectToAction(nameof(List));
         }
-
-        _sharedService.SetToastNotification(this, "User was not updated.", false);
-        return View(user);
+        catch (Exception)
+        {
+            _sharedService.SetToastNotification(this, "User was not updated.", false);
+            return View(user);
+        }
     }
 
     // GET: Users/Delete/1
     public IActionResult Delete(long id)
     {
-        var user = _userService.FindUser(id);
-
-        if (user == null)
+        try
         {
-            _sharedService.SetToastNotification(this, "User was not found.", false);
-            return NotFound();
+            var user = _userService.FindUser(id);
+
+            if (user == null)
+            {
+                _sharedService.SetToastNotification(this, "User was not found.", false);
+                return NotFound();
+            }
+
+            _userService.DeleteUser(user);
+
+            _sharedService.SetToastNotification(this, "User was deleted.", true);
+            return RedirectToAction(nameof(List));
+        }
+        catch(Exception)
+        {
+            _sharedService.SetToastNotification(this, "User was not deleted.", false);
+            return RedirectToAction(nameof(List));
         }
 
-        _userService.DeleteUser(user);
-
-        _sharedService.SetToastNotification(this, "User was deleted.", true);
-        return RedirectToAction(nameof(List));
     }
 }
