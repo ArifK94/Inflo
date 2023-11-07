@@ -80,13 +80,12 @@ public class UsersController : Controller
             _userService.CreateUser(user);
 
             _sharedService.SetToastNotification(this, "New User created.", true);
-            return RedirectToAction(nameof(List));
         }
         catch(Exception)
         {
             _sharedService.SetToastNotification(this, "New User was not created.", false);
-            return View(user);
         }
+        return RedirectToAction(nameof(List));
 
     }
 
