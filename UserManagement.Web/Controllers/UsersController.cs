@@ -1,11 +1,9 @@
 ﻿using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 using System.Reflection;
-using Newtonsoft.Json;
+using UserManagement.Services.Interfaces;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -14,7 +12,13 @@ namespace UserManagement.WebMS.Controllers;
 public class UsersController : Controller
 {
     private readonly IUserService _userService;
-    public UsersController(IUserService userService) => _userService = userService;
+    private readonly ISharedService _sharedService;
+
+    public UsersController(IUserService userService, ISharedService sharedService)
+    {
+        _userService = userService;
+        _sharedService = sharedService;
+    }
 
     [HttpGet]
     public ViewResult List()
@@ -74,11 +78,11 @@ public class UsersController : Controller
         {
             _userService.CreateUser(user);
 
-            SetToastNotification(this, "New User created.", true);
+            _sharedService.SetToastNotification(this, "New User created.", true);
             return RedirectToAction(nameof(List));
         }
 
-        SetToastNotification(this, "New User was not created.", false);
+        _sharedService.SetToastNotification(this, "New User was not created.", false);
         return View(user);
     }
 
@@ -128,21 +132,17 @@ public class UsersController : Controller
         }
         User existingUser = _userService.FindUser(id);
 
-        // TODO: Place this in a separate method in a shared class. 
         // Copy properties between both user instances.
-        foreach (PropertyInfo property in typeof(User).GetProperties().Where(p => p.CanWrite))
-        {
-            property.SetValue(existingUser, property.GetValue(user, null), null);
-        }
+        _sharedService.CopyObjectProperties(user, existingUser);
 
         if (ModelState.IsValid)
         {
             _userService.EditUser(existingUser);
-            SetToastNotification(this, "User updated.", true);
+            _sharedService.SetToastNotification(this, "User updated.", true);
             return RedirectToAction(nameof(List));
         }
 
-        SetToastNotification(this, "User was not updated.", false);
+        _sharedService.SetToastNotification(this, "User was not updated.", false);
         return View(user);
     }
 
@@ -153,20 +153,13 @@ public class UsersController : Controller
 
         if (user == null)
         {
-            SetToastNotification(this, "User was not found.", false);
+            _sharedService.SetToastNotification(this, "User was not found.", false);
             return NotFound();
         }
 
         _userService.DeleteUser(user);
 
-        SetToastNotification(this, "User was deleted.", true);
+        _sharedService.SetToastNotification(this, "User was deleted.", true);
         return RedirectToAction(nameof(List));
-    }
-
-    public void SetToastNotification(Controller controller, string message, bool isSuccess)
-    {
-        string type = isSuccess ? "success" : "error";
-        string title = isSuccess ? "Success" : "Error";
-        controller.TempData["toastrMessage"] = JsonConvert.SerializeObject(new { type = type, message = message, title = title });
     }
 }
