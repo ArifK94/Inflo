@@ -5,6 +5,9 @@
 * **Toastr(Css & JS) - Used for displaying the toast messages.
 
 
+# Database Schema
+
+![DB](Database_Schema.png)
 
 
 
