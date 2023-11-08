@@ -24,17 +24,17 @@ Complete as many of the tasks below as you can. These are split into 3 levels of
 * **Advanced** - Slightly more technical tasks and problem solving
 * **Expert** - Tasks with a higher level of problem solving and architecture needed
 
-### 1. Filters Section (Standard)
+### 1. Filters Section (Standard) - **Complete**
 
 The users page contains 3 buttons below the user listing - **Show All**, **Active Only** and **Non Active**. Show All has already been implemented. Implement the remaining buttons using the following logic:
 * Active Only – This should show only users where their `IsActive` property is set to `true`
 * Non Active – This should show only users where their `IsActive` property is set to `false`
 
-### 2. User Model Properties (Standard)
+### 2. User Model Properties (Standard) - **Complete**
 
 Add a new property to the `User` class in the system called `DateOfBirth` which is to be used and displayed in relevant sections of the app.
 
-### 3. Actions Section (Standard)
+### 3. Actions Section (Standard) - **Complete**
 
 Create the code and UI flows for the following actions
 * **Add** – A screen that allows you to create a new user and return to the list
@@ -44,7 +44,7 @@ Create the code and UI flows for the following actions
 
 Each of these screens should contain appropriate data validation, which is communicated to the end user.
 
-### 4. Data Logging (Advanced)
+### 4. Data Logging (Advanced) - **Not Done**
 
 Extend the system to capture log information regarding primary actions performed on each user in the app.
 * In the **View** screen there should be a list of all actions that have been performed against that user. 
@@ -52,7 +52,7 @@ Extend the system to capture log information regarding primary actions performed
 * In the Logs page, the user should be able to click into each entry to see more detail about it.
 * In the Logs page, think about how you can provide a good user experience - even when there are many log entries.
 
-### 5. Extend the Application (Expert)
+### 5. Extend the Application (Expert) - **Not Done**
 
 Make a significant architectural change that improves the application.
 Structurally, the user management application is very simple, and there are many ways it can be made more maintainable, scalable or testable.
