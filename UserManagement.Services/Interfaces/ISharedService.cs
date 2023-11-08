@@ -10,11 +10,10 @@ public interface ISharedService
     void SetToastNotification(Controller controller, string message, bool isSuccess);
 
     /**
-     *  Copy properties between both user instances.
+     *  Copy properties between two different objects. Only same properties will be copied.
      *  Sender object sends the values to the receiver.
      */
     void CopyObjectProperties(object sender, object receiver);
-
 
     bool IsValidEmail(string email);
 

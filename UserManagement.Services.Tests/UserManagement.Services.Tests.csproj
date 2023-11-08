@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UserManagement.Services\UserManagement.Services.csproj" />
+    <ProjectReference Include="..\UserManagement.Web\UserManagement.Web.csproj" />
   </ItemGroup>
 
 </Project>

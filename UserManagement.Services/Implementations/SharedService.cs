@@ -1,19 +1,28 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using UserManagement.Models;
 using UserManagement.Services.Interfaces;
 
 namespace UserManagement.Services.Implementations;
 public class SharedService : ISharedService
 {
+    /**
+     * The destination object will have the properties with values copied from the source object.
+     */
     public void CopyObjectProperties(object sender, object receiver)
-    {        
-        foreach (PropertyInfo property in sender.GetType().GetProperties().Where(p => p.CanWrite))
+    {
+        var sourceProperties = sender.GetType().GetProperties();
+        var destinationProperties = receiver.GetType().GetProperties();
+
+        foreach (var sourceProperty in sourceProperties)
         {
-            property.SetValue(receiver, property.GetValue(sender, null), null);
+            var destinationProperty = destinationProperties.FirstOrDefault(p => p.Name == sourceProperty.Name);
+
+            if (destinationProperty != null && destinationProperty.PropertyType == sourceProperty.PropertyType)
+            {
+                var value = sourceProperty.GetValue(sender);
+                destinationProperty.SetValue(receiver, value);
+            }
         }
     }
 
