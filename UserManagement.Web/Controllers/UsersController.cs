@@ -77,15 +77,22 @@ public class UsersController : Controller
     {
         try
         {
+            if (!ModelState.IsValid)
+            {
+                _sharedService.SetToastNotification(this, "Error occurred", false);
+                return View();
+            }
+
             _userService.CreateUser(user);
 
             _sharedService.SetToastNotification(this, "New User created.", true);
+            return RedirectToAction(nameof(List));
         }
-        catch(Exception)
+        catch (Exception)
         {
             _sharedService.SetToastNotification(this, "New User was not created.", false);
+            return View();
         }
-        return RedirectToAction(nameof(List));
 
     }
 
@@ -162,6 +169,18 @@ public class UsersController : Controller
 
         try
         {
+            if (!ModelState.IsValid)
+            {
+                _sharedService.SetToastNotification(this, "Error occurred", false);
+                return View();
+            }
+
+            if (!_sharedService.IsValidEmail(user.Email))
+            {
+                ModelState.AddModelError("email", "Invalid email address");
+                return View();
+            }
+
             User existingUser = _userService.FindUser(id);
 
             // Copy properties between both user instances.

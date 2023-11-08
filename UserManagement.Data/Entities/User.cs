@@ -17,6 +17,7 @@ public class User
     public string Surname { get; set; } = default!;
 
     [Required]
+    [EmailAddress]
     public string Email { get; set; } = default!;
 
     [DisplayName("Date of Birth")]

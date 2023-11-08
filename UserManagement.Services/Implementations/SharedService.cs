@@ -25,4 +25,16 @@ public class SharedService : ISharedService
         controller.TempData["toastrMessage"] = JsonConvert.SerializeObject(new { type = type, message = message, title = title });
     }
 
+    public bool IsValidEmail(string email)
+    {
+        try
+        {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

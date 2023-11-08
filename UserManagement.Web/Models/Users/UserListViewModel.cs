@@ -14,6 +14,8 @@ public class UserListItemViewModel
     public long Id { get; set; }
     public string? Forename { get; set; }
     public string? Surname { get; set; }
+
+    [EmailAddress]
     public string? Email { get; set; }
 
     [DisplayName("Date of Birth")]

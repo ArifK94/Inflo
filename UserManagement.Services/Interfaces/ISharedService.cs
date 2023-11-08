@@ -14,4 +14,8 @@ public interface ISharedService
      *  Sender object sends the values to the receiver.
      */
     void CopyObjectProperties(object sender, object receiver);
+
+
+    bool IsValidEmail(string email);
+
 }
