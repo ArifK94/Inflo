@@ -73,7 +73,7 @@ public class UsersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(User user)
+    public IActionResult Create(UserListItemViewModel user)
     {
         try
         {
@@ -83,7 +83,10 @@ public class UsersController : Controller
                 return View();
             }
 
-            _userService.CreateUser(user);
+            User newUser = new User();
+            _sharedService.CopyObjectProperties(user, newUser);
+
+            _userService.CreateUser(newUser);
 
             _sharedService.SetToastNotification(this, "New User created.", true);
             return RedirectToAction(nameof(List));
@@ -145,7 +148,11 @@ public class UsersController : Controller
                 _sharedService.SetToastNotification(this, errorMessage, false);
                 return RedirectToAction(nameof(List));
             }
-            return View(user);
+
+            UserListItemViewModel model = new UserListItemViewModel();
+            _sharedService.CopyObjectProperties(user, model);
+
+            return View(model);
 
         }
         catch (Exception)
@@ -160,7 +167,7 @@ public class UsersController : Controller
     // POST: Users/Edit/1
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Edit(long id, User user)
+    public IActionResult Edit(long id, UserListItemViewModel user)
     {
         if (id != user.Id)
         {
@@ -172,6 +179,11 @@ public class UsersController : Controller
             if (!ModelState.IsValid)
             {
                 _sharedService.SetToastNotification(this, "Error occurred", false);
+                return View();
+            }
+
+            if (string.IsNullOrEmpty(user.Email))
+            {
                 return View();
             }
 
